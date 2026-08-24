@@ -32,3 +32,7 @@ npm run lint    # oxlint
 
 React + TypeScript + Vite. No backend — all state (color/letter scheme, buffers,
 flashcard history) is stored in the browser's `localStorage`.
+
+## License
+
+[GPL-3.0-or-later](LICENSE)
