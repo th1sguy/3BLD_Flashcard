@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PieceCard } from '../components/PieceCard';
 import { ALL_STICKERS } from '../data/layout';
-import { getPartners } from '../data/pieceGeometry';
+import { getPartners, getPieceSiblingIds } from '../data/pieceGeometry';
 import type { AppConfig } from '../state/config';
 import type { AnswerRecord } from '../state/history';
 import type { StickerPos } from '../types';
@@ -69,9 +69,9 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
   }
 
   function isBuffer(sticker: StickerPos): boolean {
-    return (
-      sticker.id === config.buffer.cornerStickerId || sticker.id === config.buffer.edgeStickerId
-    );
+    const bufferStickerId =
+      sticker.type === 'corner' ? config.buffer.cornerStickerId : config.buffer.edgeStickerId;
+    return getPieceSiblingIds(sticker).includes(bufferStickerId);
   }
 
   function handleSubmit(value: string) {

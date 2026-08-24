@@ -1,3 +1,4 @@
+import { ALL_STICKERS } from './layout';
 import type { Direction, Face, StickerPos } from '../types';
 
 /**
@@ -43,4 +44,26 @@ export function getPartners(sticker: StickerPos): PiecePartner[] {
   }
   const direction = EDGE_SLOT_DIRECTION[sticker.slot];
   return [{ direction, face: neighbors[direction] }];
+}
+
+/** A key shared by every sticker belonging to the same physical piece (e.g. "FRU" for corner UFR). */
+function pieceKey(sticker: StickerPos): string {
+  const faces = [sticker.face, ...getPartners(sticker).map((p) => p.face)];
+  return faces.sort().join('');
+}
+
+const PIECE_SIBLINGS: Map<string, string[]> = (() => {
+  const groups = new Map<string, string[]>();
+  for (const sticker of ALL_STICKERS) {
+    const key = pieceKey(sticker);
+    const ids = groups.get(key) ?? [];
+    ids.push(sticker.id);
+    groups.set(key, ids);
+  }
+  return groups;
+})();
+
+/** Every sticker id belonging to the same physical piece as `sticker` (including itself). */
+export function getPieceSiblingIds(sticker: StickerPos): string[] {
+  return PIECE_SIBLINGS.get(pieceKey(sticker)) ?? [sticker.id];
 }

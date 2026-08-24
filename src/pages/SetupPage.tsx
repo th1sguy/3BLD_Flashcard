@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CubeNet } from '../components/CubeNet';
 import { COLOR_SCHEME_PRESETS } from '../data/colorSchemes';
 import { ALL_STICKERS } from '../data/layout';
+import { getPieceSiblingIds } from '../data/pieceGeometry';
 import type { AppConfig } from '../state/config';
 import type { Face, StickerPos } from '../types';
 import './SetupPage.css';
@@ -67,6 +68,15 @@ export function SetupPage({ config, onChange }: SetupPageProps) {
 
   const selectedSticker = ALL_STICKERS.find((s) => s.id === selectedStickerId);
 
+  const cornerBufferSticker = ALL_STICKERS.find((s) => s.id === config.buffer.cornerStickerId);
+  const edgeBufferSticker = ALL_STICKERS.find((s) => s.id === config.buffer.edgeStickerId);
+  const bufferIds = [
+    ...(cornerBufferSticker
+      ? getPieceSiblingIds(cornerBufferSticker)
+      : [config.buffer.cornerStickerId]),
+    ...(edgeBufferSticker ? getPieceSiblingIds(edgeBufferSticker) : [config.buffer.edgeStickerId]),
+  ];
+
   return (
     <div className="setup-page">
       <section>
@@ -126,7 +136,7 @@ export function SetupPage({ config, onChange }: SetupPageProps) {
           colorScheme={config.colorScheme}
           letterScheme={letterScheme}
           highlightedId={selectedStickerId}
-          bufferIds={[config.buffer.cornerStickerId, config.buffer.edgeStickerId]}
+          bufferIds={bufferIds}
           onStickerClick={handleStickerClick}
         />
 
