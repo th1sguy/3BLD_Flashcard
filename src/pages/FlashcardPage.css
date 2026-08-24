@@ -1,0 +1,57 @@
+.flashcard-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.filters label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score {
+  font-weight: 600;
+}
+
+.answer-form {
+  display: flex;
+  gap: 8px;
+}
+
+.answer-form input {
+  width: 48px;
+  font-size: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.feedback--correct p {
+  color: #15803d;
+}
+
+.feedback--wrong p {
+  color: #b91c1c;
+}
+
+.buffer-note {
+  color: #1d4ed8;
+  font-weight: 600;
+}

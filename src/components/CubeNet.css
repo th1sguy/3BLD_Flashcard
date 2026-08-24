@@ -1,0 +1,50 @@
+.cube-net {
+  position: relative;
+}
+
+.cube-sticker {
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.75);
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cube-sticker:disabled {
+  cursor: default;
+}
+
+button.cube-sticker:not(:disabled) {
+  cursor: pointer;
+}
+
+.cube-sticker--highlighted {
+  outline: 3px solid #ffffff;
+  box-shadow: 0 0 0 5px #1d4ed8;
+  z-index: 1;
+}
+
+.cube-sticker--buffer::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #111827;
+  border: 1px solid #ffffff;
+}
+
+.cube-net__center {
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+}

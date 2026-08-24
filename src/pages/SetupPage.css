@@ -1,0 +1,67 @@
+.setup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.setup-page section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.face-color-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.face-color-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-toggle button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: transparent;
+  cursor: pointer;
+}
+
+.mode-toggle button.active {
+  background: #1d4ed8;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+.letter-editor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.letter-editor input {
+  width: 40px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+.hint {
+  font-size: 13px;
+  opacity: 0.75;
+}
