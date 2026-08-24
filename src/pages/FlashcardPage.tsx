@@ -4,7 +4,7 @@ import { ALL_STICKERS } from '../data/layout';
 import { getPartners, getPieceSiblingIds } from '../data/pieceGeometry';
 import type { AppConfig } from '../state/config';
 import type { AnswerRecord } from '../state/history';
-import type { StickerPos } from '../types';
+import type { Direction, StickerPos } from '../types';
 import './FlashcardPage.css';
 
 export interface FlashcardPageProps {
@@ -23,10 +23,27 @@ function pickSticker(pool: StickerPos[], avoidId?: string): StickerPos {
   return candidate;
 }
 
+// Clockwise degrees to present the piece at, so the same letter doesn't always
+// show its connected sticker(s) on the same side of the card.
+const ROTATIONS = [0, 90, -90, 180] as const;
+
+function pickRotation(): number {
+  return ROTATIONS[Math.floor(Math.random() * ROTATIONS.length)];
+}
+
+const DIRECTION_ORDER: Direction[] = ['up', 'right', 'down', 'left'];
+
+function rotateDirection(direction: Direction, clockwiseDegrees: number): Direction {
+  const steps = (((clockwiseDegrees / 90) % 4) + 4) % 4;
+  const index = (DIRECTION_ORDER.indexOf(direction) + steps) % 4;
+  return DIRECTION_ORDER[index];
+}
+
 export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
   const [includeCorners, setIncludeCorners] = useState(true);
   const [includeEdges, setIncludeEdges] = useState(true);
   const [current, setCurrent] = useState<StickerPos | undefined>(undefined);
+  const [rotation, setRotation] = useState(0);
   const [phase, setPhase] = useState<Phase>('asking');
   const [answer, setAnswer] = useState('');
   const [wasCorrect, setWasCorrect] = useState(false);
@@ -50,6 +67,7 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
     setTimes([]);
     setLastElapsedMs(null);
     setCurrent(pool.length > 0 ? pickSticker(pool) : undefined);
+    setRotation(pickRotation());
     setPhase('asking');
     setAnswer('');
     askStartRef.current = performance.now();
@@ -99,6 +117,7 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
 
   function handleNext() {
     setCurrent(pickSticker(pool, current?.id));
+    setRotation(pickRotation());
     setPhase('asking');
     setAnswer('');
     askStartRef.current = performance.now();
@@ -151,7 +170,7 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
             stickerId={current.id}
             mainColor={config.colorScheme[current.face]}
             partners={getPartners(current).map((p) => ({
-              direction: p.direction,
+              direction: rotateDirection(p.direction, rotation),
               color: config.colorScheme[p.face],
             }))}
           />
