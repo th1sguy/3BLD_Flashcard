@@ -42,6 +42,7 @@ function rotateDirection(direction: Direction, clockwiseDegrees: number): Direct
 export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
   const [includeCorners, setIncludeCorners] = useState(true);
   const [includeEdges, setIncludeEdges] = useState(true);
+  const [excludeBuffer, setExcludeBuffer] = useState(false);
   const [current, setCurrent] = useState<StickerPos | undefined>(undefined);
   const [rotation, setRotation] = useState(0);
   const [phase, setPhase] = useState<Phase>('asking');
@@ -57,9 +58,12 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
   const pool = useMemo(
     () =>
       ALL_STICKERS.filter(
-        (s) => (s.type === 'corner' && includeCorners) || (s.type === 'edge' && includeEdges),
+        (s) =>
+          ((s.type === 'corner' && includeCorners) || (s.type === 'edge' && includeEdges)) &&
+          (!excludeBuffer || !isBuffer(s)),
       ),
-    [includeCorners, includeEdges],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [includeCorners, includeEdges, excludeBuffer, config.buffer],
   );
 
   function startNewSession() {
@@ -74,7 +78,7 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(startNewSession, [includeCorners, includeEdges]);
+  useEffect(startNewSession, [includeCorners, includeEdges, excludeBuffer]);
 
   useEffect(() => {
     if (phase === 'asking') inputRef.current?.focus();
@@ -151,6 +155,14 @@ export function FlashcardPage({ config, onAnswer }: FlashcardPageProps) {
             onChange={(e) => toggleEdges(e.target.checked)}
           />
           Edges
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={excludeBuffer}
+            onChange={(e) => setExcludeBuffer(e.target.checked)}
+          />
+          Exclude buffer
         </label>
         <button type="button" onClick={startNewSession}>
           Reset session
