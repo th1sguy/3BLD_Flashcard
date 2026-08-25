@@ -13,6 +13,7 @@ A flashcard trainer for memorizing 3x3x3 blindfolded (BLD) sticker/letter scheme
 - **Stats** — accuracy and speed heatmaps over the full cube net, a "needs work"
   table of your weakest letters, and running totals. History persists across
   sessions in the browser (`localStorage`).
+- **Guide** — a quick in-app explanation of how each mode works.
 
 ## Development
 
